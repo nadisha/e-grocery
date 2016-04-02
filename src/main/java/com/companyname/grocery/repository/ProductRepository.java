@@ -7,5 +7,5 @@ import com.companyname.grocery.domain.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>{
-
+	public Product findByName(String name);
 }

@@ -14,8 +14,15 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository productRepository;
 	
 	public Product create(Product product) {
-		return new Product();
-		//return productRepository.save(product);
+		return productRepository.save(product);
 	}
 
+	public void deleteByName(String name) {
+		Product product = productRepository.findByName(name);
+		if (product != null) {
+			productRepository.delete(product);
+		}
+	}
+
+	
 }
