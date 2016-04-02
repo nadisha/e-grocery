@@ -15,9 +15,8 @@ import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.companyname.grocery.web.*"})
-@PropertySource("classpath:config.properties")
-@Import(value = {RepositoryConfiguration.class})
+@ComponentScan(basePackages = {"com.companyname.grocery.web"})
+@Import(value = {ServiceConfiguration.class})
 public class WebConfiguration extends WebMvcConfigurerAdapter{
 	
 	@Bean
