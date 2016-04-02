@@ -1,4 +1,4 @@
-package com.companyname.grocery.config;
+package com.technoura.grocery.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

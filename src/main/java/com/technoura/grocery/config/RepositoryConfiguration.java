@@ -1,4 +1,4 @@
-package com.companyname.grocery.config;
+package com.technoura.grocery.config;
 
 import java.util.Properties;
 
@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -19,8 +20,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(basePackages = { "com.companyname.grocery.repository.*" })
+@EnableJpaRepositories(basePackages = "com.technoura.grocery.repository")
 @EnableTransactionManagement
+@PropertySource("classpath:config.properties")
 public class RepositoryConfiguration {
 	@Autowired
 	private Environment env;
@@ -43,7 +45,7 @@ public class RepositoryConfiguration {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan("com.companyname.grocery.domain");
+		factory.setPackagesToScan("com.technoura.grocery.domain");
 		factory.setDataSource(dataSource());
 		factory.setJpaProperties(additionalProperties());
 		factory.afterPropertiesSet();

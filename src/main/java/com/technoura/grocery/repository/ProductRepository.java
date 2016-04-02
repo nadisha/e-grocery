@@ -1,9 +1,9 @@
-package com.companyname.grocery.repository;
+package com.technoura.grocery.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.companyname.grocery.domain.Product;
+import com.technoura.grocery.domain.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>{

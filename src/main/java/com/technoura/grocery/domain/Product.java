@@ -1,4 +1,4 @@
-package com.companyname.grocery.domain;
+package com.technoura.grocery.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

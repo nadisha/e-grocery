@@ -1,4 +1,4 @@
-package com.companyname.grocery.config;
+package com.technoura.grocery.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,12 +15,12 @@ import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.companyname.grocery.web.*"})
+@ComponentScan(basePackages = "com.technoura.grocery.web")
 @PropertySource("classpath:config.properties")
-@Import(value = {RepositoryConfiguration.class})
+@Import(value = {RepositoryConfiguration.class,ServiceConfiguration.class})
 public class WebConfiguration extends WebMvcConfigurerAdapter{
 	
-	@Bean
+	/*@Bean
 	public ViewResolver tilesViewResolver() {
 		TilesViewResolver viewResolver = new TilesViewResolver();
 		viewResolver.setViewClass(TilesView.class);
@@ -33,7 +33,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter{
 		tilesConfigurer.setCheckRefresh(true);
 		tilesConfigurer.setDefinitions("/WEB-INF/tiles.xml", "/WEB-INF/views/views.xml");
 		return tilesConfigurer;
-	}
+	}*/
 	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

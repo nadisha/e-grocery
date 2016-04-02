@@ -16,3 +16,6 @@ hs_err_pid*
 .gitignore.swp
 .project
 .settings/
+/bin/
+.tomcatplugin
+src/main/resources/log4j.properties
