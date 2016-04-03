@@ -15,6 +15,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.companyname.grocery.config.ServiceConfiguration;
 import com.companyname.grocery.domain.Category;
+import com.companyname.grocery.domain.Category.Status;
 import com.companyname.grocery.service.CategoryService;
 import com.companyname.test.grocery.utils.CategoryUtils;
 
@@ -45,36 +46,33 @@ public class CategoryServiceIntegrationTest {
 
 	@Test
 	public void testCreateParentWithMultipleChildren() {
-		Category parent = CategoryUtils.getNewCategory(CategoryUtils.PARENT_CAT_NAME_1, null);
-		parent = service.create(parent);
-		Category childA = CategoryUtils.getNewCategory(CategoryUtils.CHILD_CAT_NAME_1_1, parent.getId());
-		childA = service.create(childA);
-		Category childB = CategoryUtils.getNewCategory(CategoryUtils.CHILD_CAT_NAME_1_2, parent.getId());
-		childB = service.create(childB);
+		Category parent = createActiveCategory(CategoryUtils.PARENT_CAT_NAME_1, null);
+		Category childA = createActiveCategory(CategoryUtils.CHILD_CAT_NAME_1_1, parent.getId());
+		Category childB = createActiveCategory(CategoryUtils.CHILD_CAT_NAME_1_2, parent.getId());
 
 		assertNotNull(String.format("Child Category [%s] has not been created", CategoryUtils.CHILD_CAT_NAME_1_1),
 				childA.getParentId());
 		assertNotNull(String.format("Child Category [%s] has not been created", CategoryUtils.CHILD_CAT_NAME_1_2),
 				childB.getParentId());
-		assertEquals(String.format("Expecting a 2 children for parent [%s] category", CategoryUtils.PARENT_CAT_NAME_1),
-				2, service.getChildren(childA.getParentId()).size());
+		assertEquals(String.format("Expecting 2 children for parent [%s] category", CategoryUtils.PARENT_CAT_NAME_1), 2,
+				service.getChildren(childA.getParentId()).size());
 	}
 
 	@Test
+	/**
+	 * The tree structure is. Parent 1 -> { Child 1.1, Child 1.2 }, Parent 2
+	 * Parent 3 -> { Child 3.1 [ Child 3.1.1 ] }
+	 */
 	public void testGetCategoryTree() {
-		Category parent1 = CategoryUtils.getNewCategory(CategoryUtils.PARENT_CAT_NAME_1, null);
-		parent1 = service.create(parent1);
-		service.create(CategoryUtils.getNewCategory(CategoryUtils.CHILD_CAT_NAME_1_1, parent1.getId()));
-		service.create(CategoryUtils.getNewCategory(CategoryUtils.CHILD_CAT_NAME_1_2, parent1.getId()));
+		Category parent1 = createActiveCategory(CategoryUtils.PARENT_CAT_NAME_1, null);
+		createActiveCategory(CategoryUtils.CHILD_CAT_NAME_1_1, parent1.getId());
+		createActiveCategory(CategoryUtils.CHILD_CAT_NAME_1_2, parent1.getId());
 
-		Category parent2 = CategoryUtils.getNewCategory(CategoryUtils.PARENT_CAT_NAME_2, null);
-		service.create(parent2);
+		createActiveCategory(CategoryUtils.PARENT_CAT_NAME_2, null);
 
-		Category parent3 = CategoryUtils.getNewCategory(CategoryUtils.PARENT_CAT_NAME_3, null);
-		parent3 = service.create(parent3);
-		Category child3_1 = CategoryUtils.getNewCategory(CategoryUtils.CHILD_CAT_NAME_3_1, parent3.getId());
-		child3_1 = service.create(child3_1);
-		service.create(CategoryUtils.getNewCategory(CategoryUtils.CHILD_CAT_NAME_3_1_1, child3_1.getId()));
+		Category parent3 = createActiveCategory(CategoryUtils.PARENT_CAT_NAME_3, null);
+		Category child3_1 = createActiveCategory(CategoryUtils.CHILD_CAT_NAME_3_1, parent3.getId());
+		createActiveCategory(CategoryUtils.CHILD_CAT_NAME_3_1_1, child3_1.getId());
 
 		Set<Category> tree = service.getCategoryTree();
 		assertEquals("Expecting 3 parent level categories", 3, tree.size());
@@ -87,5 +85,11 @@ public class CategoryServiceIntegrationTest {
 				children.size());
 		assertEquals(String.format("Expecting 1 child for the parent [%s]", CategoryUtils.CHILD_CAT_NAME_3_1), 1,
 				((Category) children.toArray()[0]).getChildCategories().size());
+	}
+
+	private Category createActiveCategory(String name, Long parentId) {
+		Category category = service.create(CategoryUtils.getNewCategory(name, parentId));
+		category.setStatus(Status.ACTIVE);
+		return service.update(category);
 	}
 }

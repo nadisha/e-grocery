@@ -25,8 +25,6 @@ public class CategoryUtils {
 		Category category = new Category();
 		category.setName(name);
 		category.setParentId(parentId);
-		category.setStatus(Status.ACTIVE);
-		category.setCreatedDate(Calendar.getInstance().getTime());
 		return category;
 	}
 }
