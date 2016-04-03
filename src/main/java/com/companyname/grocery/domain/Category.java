@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -28,6 +30,8 @@ public class Category {
 	private Boolean isParent;
 	private Boolean isLeaf;
 	private Status status;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category", targetEntity = Product.class)
+	private Set<Product> products;
 	private Date createdDate;
 	private Date lastModifiedDate;
 	private String lastModifiedBy;

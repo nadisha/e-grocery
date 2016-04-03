@@ -88,8 +88,6 @@ public class CategoryServiceIntegrationTest {
 	}
 
 	private Category createActiveCategory(String name, Long parentId) {
-		Category category = service.create(CategoryUtils.getNewCategory(name, parentId));
-		category.setStatus(Status.ACTIVE);
-		return service.update(category);
+		return service.create(CategoryUtils.getNewActiveCategory(name, parentId));
 	}
 }

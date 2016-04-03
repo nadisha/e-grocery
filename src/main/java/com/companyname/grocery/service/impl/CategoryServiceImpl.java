@@ -18,12 +18,15 @@ public class CategoryServiceImpl implements CategoryService {
 	private CategoryRepository repository;
 
 	public Category create(Category category) {
-		category.setStatus(Status.INACTIVE);
+		// TODO : Need to check the category is already exist
+		if (category.getStatus() == null) {
+			category.setStatus(Status.INACTIVE);
+		}		
 		category.setCreatedDate(DateTime.now().toDate());
 		category.setLastModifiedDate(DateTime.now().toDate());
 		return repository.save(category);
 	}
-
+	
 	public Set<Category> getChildren(Long parentId) {
 		Set<Category> children = repository.findByParentIdAndStatusOrderByNameAsc(parentId, Status.ACTIVE);
 		for (Category category : children) {
@@ -55,5 +58,11 @@ public class CategoryServiceImpl implements CategoryService {
 			repository.delete(category);
 		}
 	}
+
+	public Category findByName(String name) {
+		return repository.findByName(name);
+	}
+
+
 
 }

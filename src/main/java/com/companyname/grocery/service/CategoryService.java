@@ -5,6 +5,11 @@ import java.util.Set;
 import com.companyname.grocery.domain.Category;
 
 public interface CategoryService {
+	/**
+	 * Default creates an inactive category
+	 * @param category
+	 * @return category in INACTIVE state
+	 */
 	Category create(Category category);
 
 	Set<Category> getChildren(Long parentId);
@@ -13,6 +18,8 @@ public interface CategoryService {
 	 * Consider only ACTIVE categories
 	 */
 	Set<Category> getCategoryTree();
+	
+	Category findByName(String name);
 
 	Category update(Category category);
 

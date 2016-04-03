@@ -27,4 +27,10 @@ public class CategoryUtils {
 		category.setParentId(parentId);
 		return category;
 	}
+	
+	public static Category getNewActiveCategory(String name, Long parentId) {
+		Category category = getNewCategory(name, parentId);
+		category.setStatus(Status.ACTIVE);
+		return category;
+	}
 }
