@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="homepage" extends="base.definition">
+		<put-attribute name="title" value="Home"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/sections/home.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="registerpage" extends="base.definition">
+		<put-attribute name="title" value="Registration"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/sections/registration.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="logipage" extends="base.definition">
+		<put-attribute name="title" value="User Login"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/sections/login.jsp"></put-attribute>
+	</definition>			
+	
+	<definition name="dashboard1page" extends="base.definition">
+		<put-attribute name="title" value="Admin Dashboard"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/sections/adminDashboard.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="dashboard2page" extends="base.definition">
+		<put-attribute name="title" value="User Dashboard"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/sections/userDashboard.jsp"></put-attribute>
+	</definition>		
+	
+	<definition name="roleAssignmentpage" extends="base.definition">
+		<put-attribute name="title" value="Assign Role to User"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/sections/roleAssignment.jsp"></put-attribute>
+	</definition>		
+	
+				
+</tiles-definitions>
