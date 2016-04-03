@@ -12,7 +12,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
-	
+
 	public Product create(Product product) {
 		return productRepository.save(product);
 	}
@@ -24,5 +24,4 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
-	
 }

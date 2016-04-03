@@ -18,6 +18,7 @@
 		<com.fasterxml.jackson.version>2.6.0</com.fasterxml.jackson.version>
 		<org.hibernate.version>4.3.5.Final</org.hibernate.version>
 		<junit.version>4.11</junit.version>
+		<joda-time.version>2.9.3</joda-time.version>
 	</properties>
 
 	<dependencies>
@@ -123,9 +124,9 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${org.hibernate.version}</version>			
+			<version>${org.hibernate.version}</version>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -139,18 +140,25 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
-		</dependency> 
-		
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>		
+			<artifactId>spring-test</artifactId>
 			<version>${org.springframework.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- Date Time Handler -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda-time.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
-	
+
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -165,7 +173,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<!-- finalName>${context.name}</finalName-->
+		<!-- finalName>${context.name}</finalName -->
 	</build>
-		
+
 </project>

@@ -1,6 +1,5 @@
 package com.companyname.grocery.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +15,9 @@ import javax.persistence.Transient;
 @Table(name = "categories")
 public class Category {
 	public enum Status {
-		ACTIVE, REMOVE
+		ACTIVE, // The end user can see
+		INACTIVE, // The end user can't see until change to ACTIVE
+		REMOVE // The end user can't see and not use for any operation
 	}
 
 	@Id
@@ -30,7 +31,7 @@ public class Category {
 	private Date createdDate;
 	private Date lastModifiedDate;
 	private String lastModifiedBy;
-	
+
 	@Transient
 	private Set<Category> childCategories;
 
@@ -113,7 +114,7 @@ public class Category {
 	public void setChildCategories(Set<Category> childCategories) {
 		this.childCategories = childCategories;
 	}
-	
+
 	public void addChild(Category category) {
 		if (this.childCategories == null) {
 			this.childCategories = new HashSet<Category>();

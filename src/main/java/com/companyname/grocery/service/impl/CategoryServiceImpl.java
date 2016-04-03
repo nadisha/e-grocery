@@ -1,8 +1,8 @@
 package com.companyname.grocery.service.impl;
 
-import java.util.List;
 import java.util.Set;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,23 +12,41 @@ import com.companyname.grocery.repository.CategoryRepository;
 import com.companyname.grocery.service.CategoryService;
 
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryRepository repository;
-	
+
 	public Category create(Category category) {
+		category.setStatus(Status.INACTIVE);
+		category.setCreatedDate(DateTime.now().toDate());
+		category.setLastModifiedDate(DateTime.now().toDate());
 		return repository.save(category);
 	}
 
+	public Set<Category> getChildren(Long parentId) {
+		Set<Category> children = repository.findByParentIdAndStatusOrderByNameAsc(parentId, Status.ACTIVE);
+		for (Category category : children) {
+			category.setChildCategories(getChildren(category.getId()));
+		}
+		return children;
+	}
+
+	public Set<Category> getCategoryTree() {
+		Set<Category> parents = repository.findByParentIdAndStatusOrderByNameAsc(null, Status.ACTIVE);
+		for (Category p : parents) {
+			p.setChildCategories(this.getChildren(p.getId()));
+		}
+		return parents;
+	}
+
 	public Category update(Category category) {
-		// TODO Auto-generated method stub
-		return null;
+		category.setLastModifiedDate(DateTime.now().toDate());
+		return repository.save(category);
 	}
 
 	public void remove(Long id) {
-		// TODO Auto-generated method stub
-		
+		repository.delete(repository.findOne(id));
 	}
 
 	public void deleteByName(String name) {
@@ -36,19 +54,6 @@ public class CategoryServiceImpl implements CategoryService{
 		if (category != null) {
 			repository.delete(category);
 		}
-	}
-
-	public List<Category> getCategoryTree() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Set<Category> getChildren(Long parentId) {
-		Set<Category> children = repository.findByParentIdAndStatus(parentId, Status.ACTIVE);
-		for (Category category : children) {
-			category.setChildCategories(getChildren(category.getId()));
-		}
-		return children;
 	}
 
 }
