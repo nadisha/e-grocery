@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -20,33 +22,48 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.technoura.grocery.repository")
+@EnableJpaRepositories(basePackages = {"com.technoura.grocery.repository"})
+@PropertySource(name="propertyConfig", value = {"classpath:config.properties"})
 @EnableTransactionManagement
-@PropertySource("classpath:config.properties")
-public class RepositoryConfiguration {
+public class RepositoryConfig {
 	@Autowired
 	private Environment env;
-
-	@Bean
+	
+	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-		dataSource.setUrl(env.getProperty("jdbc.url"));
-		dataSource.setUsername(env.getProperty("jdbc.user"));
-		dataSource.setPassword(env.getProperty("jdbc.password"));
-		return dataSource;
+		BasicDataSource bds = new BasicDataSource();
+		bds.setDriverClassName(env.getProperty("jdbc_driver_class"));
+		bds.setUrl(env.getProperty("jdbc_url"));
+		bds.setUsername(env.getProperty("jdbc_username"));
+		bds.setPassword(env.getProperty("jdbc_password"));
+		bds.setMaxIdle(Integer.parseInt(env.getProperty("jdbc_max_active")));
+		bds.setInitialSize(Integer.parseInt(env.getProperty("jdbc_initial_size")));
+		bds.setMaxIdle(Integer.parseInt(env.getProperty("jdbc_max_idle")));
+		bds.setMinIdle(Integer.parseInt(env.getProperty("jdbc_min_idle")));
+		bds.setMaxWaitMillis(Integer.parseInt(env.getProperty("jdbc_max_waitmillis")));
+		
+		return bds;
+	}
+	
+	@Bean
+	public JdbcTemplate jdbcTemplate() {
+		return new JdbcTemplate(dataSource());
+	}
+	
+	@Bean
+	public NamedParameterJdbcTemplate namedParameterJdbcTemplate() {
+		return new NamedParameterJdbcTemplate(dataSource());
 	}
 
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
-
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setGenerateDdl(true);
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan("com.technoura.grocery.domain");
-		factory.setDataSource(dataSource());
+		factory.setPackagesToScan(getPackagesToScan());
+		factory.setDataSource(dataSource());		
 		factory.setJpaProperties(additionalProperties());
 		factory.afterPropertiesSet();
 
@@ -64,11 +81,18 @@ public class RepositoryConfiguration {
 	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 		return new PersistenceExceptionTranslationPostProcessor();
 	}
-
+		
+	private String[] getPackagesToScan() {
+		String [] packages = {
+				"com.technoura.grocery.domain"
+		};
+		return packages;
+	}
+	
 	Properties additionalProperties() {
 		Properties properties = new Properties();
-		// properties.setProperty("hibernate.hbm2ddl.auto", "create");
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("jpa.hibernate.ddl.auto"));
+		properties.setProperty("hibernate.dialect", env.getProperty("jpa.properties.hibernate.dialect"));
 		return properties;
-	}
+	}	
 }

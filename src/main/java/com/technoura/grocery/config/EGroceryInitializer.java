@@ -1,12 +1,14 @@
 package com.technoura.grocery.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+@Configuration
 public class EGroceryInitializer extends AbstractAnnotationConfigDispatcherServletInitializer{
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] {WebConfiguration.class};
+		return new Class[] {WebConfig.class, ServiceConfig.class};
 	}
 
 	@Override
@@ -19,5 +21,10 @@ public class EGroceryInitializer extends AbstractAnnotationConfigDispatcherServl
 		return new String[] { "/" };
 	}
 	
-
+//	@Override
+//	protected Filter[] getServletFilters() {
+//		return new Filter[] {
+//			new AuthenticationTokenFilter()
+//		};
+//	}
 }

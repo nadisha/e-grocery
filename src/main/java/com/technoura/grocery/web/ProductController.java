@@ -31,7 +31,7 @@ public class ProductController {
 	@RequestMapping(value="" , method=RequestMethod.POST,produces="application/json", consumes="application/json")
     public Product createProduct(@RequestBody Product p) {
 		
-		logger.debug("Saved Production   {}",p.getName());
+		// logger.debug("Saved Production   {}",p.getName());
         return ProductService.add(p);
     }
  
